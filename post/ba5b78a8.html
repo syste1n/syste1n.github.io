@@ -18,21 +18,21 @@
   
   
   <title>致远OA任意文件写入漏洞 | 十年磨一剑、潜心习安全 --小丑</title>
-  <meta name="description" content="一、前言致远OA系统由北京致远互联软件股份有限公司开发，是一款基于互联网高效协作的协同管理软件，在各企业机构中被广泛使用。近期致远OA系统被爆出存在任意文件写入漏洞，已经被发现在野外利用。  网藤CRS/ARS产品已全面支持该漏洞的检测与验证，网藤用户可直接登陆www.riskivy.com进行验证。 二、漏洞简介致远 OA 系统的一些版本存在任意文件写入漏洞，远程攻击者在无需登录的情况下可通过向">
+  <meta name="description" content="一、漏洞预警近日，深信服安全团队发现了在野的致远 OA A8 无需认证 Getshell 漏洞利用方式，攻击者可直接在/seeyon/htmlofficeservlet路径下构造携带webshell文件的请求数据，从而获取目标服务器权限。深信服安全团队第一时间响应并发布预警信息，并将持续跟踪事态进展。深信服安全团队风险评级：高危   二、漏洞概要   漏洞名称 致远 OA A8 无需认证 可Get">
 <meta property="og:type" content="article">
 <meta property="og:title" content="致远OA任意文件写入漏洞">
 <meta property="og:url" content="http://yoursite.com/post/ba5b78a8.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="一、前言致远OA系统由北京致远互联软件股份有限公司开发，是一款基于互联网高效协作的协同管理软件，在各企业机构中被广泛使用。近期致远OA系统被爆出存在任意文件写入漏洞，已经被发现在野外利用。  网藤CRS/ARS产品已全面支持该漏洞的检测与验证，网藤用户可直接登陆www.riskivy.com进行验证。 二、漏洞简介致远 OA 系统的一些版本存在任意文件写入漏洞，远程攻击者在无需登录的情况下可通过向">
+<meta property="og:description" content="一、漏洞预警近日，深信服安全团队发现了在野的致远 OA A8 无需认证 Getshell 漏洞利用方式，攻击者可直接在/seeyon/htmlofficeservlet路径下构造携带webshell文件的请求数据，从而获取目标服务器权限。深信服安全团队第一时间响应并发布预警信息，并将持续跟踪事态进展。深信服安全团队风险评级：高危   二、漏洞概要   漏洞名称 致远 OA A8 无需认证 可Get">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://image.3001.net/images/20190627/15616144161142.png!small">
-<meta property="og:image" content="https://image.3001.net/images/20190627/15616145108881.png!small">
-<meta property="og:image" content="https://image.3001.net/images/20190627/15616147856736.png!small">
-<meta property="og:updated_time" content="2019-07-02T03:51:47.081Z">
+<meta property="og:image" content="https://www.gdcert.com.cn/resources/upload/news/20190628/0065872899a06add93c1773648699e49.png">
+<meta property="og:image" content="https://www.gdcert.com.cn/resources/upload/news/20190628/0c07610ae0b9b351ac86424744632b80.png">
+<meta property="og:image" content="https://www.gdcert.com.cn/resources/upload/news/20190628/59bac5f1e46d1797692f2d09486e2e8e.png">
+<meta property="og:updated_time" content="2019-07-02T06:08:18.658Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="致远OA任意文件写入漏洞">
-<meta name="twitter:description" content="一、前言致远OA系统由北京致远互联软件股份有限公司开发，是一款基于互联网高效协作的协同管理软件，在各企业机构中被广泛使用。近期致远OA系统被爆出存在任意文件写入漏洞，已经被发现在野外利用。  网藤CRS/ARS产品已全面支持该漏洞的检测与验证，网藤用户可直接登陆www.riskivy.com进行验证。 二、漏洞简介致远 OA 系统的一些版本存在任意文件写入漏洞，远程攻击者在无需登录的情况下可通过向">
-<meta name="twitter:image" content="https://image.3001.net/images/20190627/15616144161142.png!small">
+<meta name="twitter:description" content="一、漏洞预警近日，深信服安全团队发现了在野的致远 OA A8 无需认证 Getshell 漏洞利用方式，攻击者可直接在/seeyon/htmlofficeservlet路径下构造携带webshell文件的请求数据，从而获取目标服务器权限。深信服安全团队第一时间响应并发布预警信息，并将持续跟踪事态进展。深信服安全团队风险评级：高危   二、漏洞概要   漏洞名称 致远 OA A8 无需认证 可Get">
+<meta name="twitter:image" content="https://www.gdcert.com.cn/resources/upload/news/20190628/0065872899a06add93c1773648699e49.png">
   <!-- Canonical links -->
   <link rel="canonical" href="http://yoursite.com/post/ba5b78a8.html">
   
@@ -275,29 +275,34 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h2 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h2><p>致远OA系统由北京致远互联软件股份有限公司开发，是一款基于互联网高效协作的协同管理软件，在各企业机构中被广泛使用。近期致远OA系统被爆出存在任意文件写入漏洞，已经被发现在野外利用。</p>
-<p><a href="https://image.3001.net/images/20190627/15616144161142.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20190627/15616144161142.png!small" alt="1.png"></a></p>
-<p>网藤CRS/ARS产品已全面支持该漏洞的检测与验证，网藤用户可直接登陆<a href="http://www.riskivy.com/" target="_blank" rel="noopener">www.riskivy.com</a>进行验证。</p>
-<h2 id="二、漏洞简介"><a href="#二、漏洞简介" class="headerlink" title="二、漏洞简介"></a>二、漏洞简介</h2><p>致远 OA 系统的一些版本存在任意文件写入漏洞，远程攻击者在无需登录的情况下可通过向 URL /seeyon/htmlofficeservlet POST 精心构造的数据即可向目标服务器写入任意文件，写入成功后可执行任意系统命令进而控制目标服务器。</p>
-<h2 id="三、漏洞验证"><a href="#三、漏洞验证" class="headerlink" title="三、漏洞验证"></a>三、漏洞验证</h2><p>访问URL /seeyon/htmlofficeservlet 出现如下内容可能存在漏洞，需要关注。</p>
-<p><a href="https://image.3001.net/images/20190627/15616145108881.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20190627/15616145108881.png!small" alt="2.png"></a></p>
-<h2 id="四、漏洞危害"><a href="#四、漏洞危害" class="headerlink" title="四、漏洞危害"></a>四、漏洞危害</h2><p>成功利用此漏洞的攻击者可以在目标系统上执行任意代码。然后攻击者查看，更改或删除数据。</p>
-<h2 id="五、影响范围"><a href="#五、影响范围" class="headerlink" title="五、影响范围"></a>五、影响范围</h2><blockquote>
-<p>致远A8-V5协同管理软件V6.1sp1</p>
-<p>致远A8+协同管理软件V7.0、V7.0sp1、V7.0sp2、V7.0sp3</p>
-<p>致远A8+协同管理软件V7.1</p>
-</blockquote>
-<h2 id="六、修复方案"><a href="#六、修复方案" class="headerlink" title="六、修复方案"></a>六、修复方案</h2><h3 id="1-配置访问控制策略："><a href="#1-配置访问控制策略：" class="headerlink" title="1.配置访问控制策略："></a>1.配置访问控制策略：</h3><p>对路径 /seeyon/htmlofficeservlet 进行限制访问</p>
-<h3 id="2-修改应用程序配置文件"><a href="#2-修改应用程序配置文件" class="headerlink" title="2.修改应用程序配置文件:"></a>2.修改应用程序配置文件:</h3><p>修改</p>
-<blockquote>
-<p>Seeyon/A8/ApacheJetspeed/webapps/seeyon/WEB-INF/web.xml文件</p>
-</blockquote>
-<p>将如下内容进行注释，并重启应用程序</p>
-<p><a href="https://image.3001.net/images/20190627/15616147856736.png" target="_blank" rel="noopener"><img src="https://image.3001.net/images/20190627/15616147856736.png!small" alt="3.png"></a></p>
-<h3 id="3-联系官方获取补丁程序："><a href="#3-联系官方获取补丁程序：" class="headerlink" title="3.联系官方获取补丁程序："></a>3.联系官方获取补丁程序：</h3><p>官网地址:</p>
-<blockquote>
-<p><a href="http://www.seeyon.com/Info/constant.html" target="_blank" rel="noopener">http://www.seeyon.com/Info/constant.html</a></p>
-</blockquote>
+        <p>一、漏洞预警<br>近日，深信服安全团队发现了在野的致远 OA A8 无需认证 Getshell 漏洞利用方式，攻击者可直接在/seeyon/htmlofficeservlet路径下构造携带webshell文件的请求数据，从而获取目标服务器权限。<br>深信服安全团队第一时间响应并发布预警信息，并将持续跟踪事态进展。<br>深信服安全团队风险评级：高危  </p>
+<h1 id="二、漏洞概要"><a href="#二、漏洞概要" class="headerlink" title="二、漏洞概要"></a>二、漏洞概要</h1><table>
+<thead>
+<tr>
+<th>漏洞名称</th>
+<th>致远 OA A8 无需认证 可Getshell 漏洞</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>时间轴</td>
+<td>2019/06/26 深信服千里目安全实验室发现该漏洞的在野利用方式。 2019/06/26 深信服千里目安全实验室复现该漏洞，并发布漏洞预警文章以及产品解决方案。</td>
+</tr>
+<tr>
+<td>威胁等级</td>
+<td>高危</td>
+</tr>
+<tr>
+<td>影响范围</td>
+<td>A8+V7.0 SP3、 A8+ V6.1 SP2 (暂定)</td>
+</tr>
+<tr>
+<td>利用难度</td>
+<td>容易</td>
+</tr>
+</tbody></table>
+<p>三、漏洞分析<br>3.1 致远OA软件介绍<br>致远是用友下属的全资子公司，从事OA办公自动化软件的开发销售与服务工作，致远OA被广泛应用于政府、国企等国内重要行业中。<br>3.2漏洞分析<br>致远 OA A8 无需认证可 Getshell 漏洞利用方式较为容易，攻击者无需进行认证，只需要直接在/seeyon/htmlofficeservlet路径下使用POST方法构造携带webshell文件进行上传，通过连接上传的webshell获取到目标服务器的权限。<br>3.3漏洞复现<br>访问致远OA应用系统，在/seeyon/htmlofficeservlet路径下构造POST请求数据，可以实现对服务器进行上传webshell，通过连接webshell在服务器上执行任意命令，过程如下。<br>(1)先访问<a href="http://XX.XX.XX.XX/seeyon/htmlofficeservlet，如下图所示，可能存在漏洞，需要进一步利用验证" target="_blank" rel="noopener">http://XX.XX.XX.XX/seeyon/htmlofficeservlet，如下图所示，可能存在漏洞，需要进一步利用验证</a><br><img src="https://www.gdcert.com.cn/resources/upload/news/20190628/0065872899a06add93c1773648699e49.png" alt="0065872899a06add93c1773648699e49.png"><br>(2)构造POST请求数据包，数据包内容携带webshell内容，如下图<br><img src="https://www.gdcert.com.cn/resources/upload/news/20190628/0c07610ae0b9b351ac86424744632b80.png" alt="0c07610ae0b9b351ac86424744632b80.png"><br>(3)访问上传的webshell文件进行操作，如下图<br><img src="https://www.gdcert.com.cn/resources/upload/news/20190628/59bac5f1e46d1797692f2d09486e2e8e.png" alt="59bac5f1e46d1797692f2d09486e2e8e.png"><br>四、影响范围<br>目前据统计，在全球范围内对互联网开放致远OA的资产数量多达31495台，其中归属中国地区的受影响资产数量为3万以上。<br>目前受影响的致远OA版本：<br>A8+V7.0 SP3、A8+ V6.1 SP2</p>
+<p>五、解决方案<br>5.1产品解决方案<br>深信服安全云在漏洞爆发之初，已完成检测更新，对所有用户网站探测，保障用户安全。不清楚自身业务是否存在漏洞的用户，可注册信服云眼账号，获取30天免费安全体验。<br>注册地址：<a href="http://saas.sangfor.com.cn" target="_blank" rel="noopener">http://saas.sangfor.com.cn</a><br>深信服云镜在漏洞爆发的第一时间就完成从云端下发本地检测更新，部署云镜的用户只需选择紧急漏洞检测，即可轻松、快速检测此高危风险。<br>深信服下一代防火墙可轻松防御此漏洞，建议部署深信服下一代防火墙的用户更新至最新的安全防护规则，可轻松抵御此高危风险。<br>深信服云盾已第一时间从云端自动更新防护规则，云盾用户无需操作，即可轻松、快速防御此高危风险。<br>5.2修复建议<br>1、 临时缓解措施<br>配置 URL 访问控制策略部署于公网的致远 A8+服务器，可通过 ACL 禁止外网对“/seeyon/htmlofficeservlet”路径的访问。<br>2、官方补丁<br>请联系致远官方，获取官方补丁程序。<br>厂商官网： <a href="http://www.seeyon.com/info/company.html" target="_blank" rel="noopener">http://www.seeyon.com/info/company.html</a>  </p>
+<p>** 注：由于EXP已经流传，建议客户在 seeyon 目录下排查是否有成功上传的后门文件，如果有，请尽快删除，必要情况下对服务器进行自查，确保主机安全。</p>
 
       
     </div>
