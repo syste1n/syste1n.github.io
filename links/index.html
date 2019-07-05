@@ -180,6 +180,13 @@
 
     
       
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/渗透思路/">渗透思路</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/漏洞复现/">漏洞复现</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
 
     
       
@@ -191,7 +198,7 @@
   <div class="widget">
     <h3 class="widget-title">归档</h3>
     <div class="widget-body">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/7088/07/">七月 7088</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">七月 2019</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/7088/07/">七月 7088</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">七月 2019</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -222,7 +229,22 @@
             
             <div class="item-inner">
               <p class="item-category">
-                
+                <a class="category-link" href="/categories/渗透思路/">渗透思路</a>
+              </p>
+              <p class="item-title">
+                <a href="/post/5470c659.html" class="title">一套比较合理的渗透思路答问</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-07-05T01:34:49.000Z" itemprop="datePublished">2019-07-05</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/漏洞复现/">漏洞复现</a>
               </p>
               <p class="item-title">
                 <a href="/post/ba5b78a8.html" class="title">致远OA任意文件写入漏洞</a>
@@ -280,9 +302,7 @@
   
   <section id="comments">
   	
-      <div id="lv-container" data-id="city" data-uid="MTAyMC80NTAyMS8yMTUzOQ==">
-        <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
-      </div>    
+      <div id="vcomments"></div>
     
   </section>
 
@@ -345,20 +365,29 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
    
     
-<script type="text/javascript">
-   (function(d, s) {
-       var j, e = d.getElementsByTagName(s)[0];
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
 
-       if (typeof LivereTower === 'function') { return; }
-
-       j = d.createElement(s);
-       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-       j.async = true;
-
-       e.parentNode.insertBefore(j, e);
-   })(document, 'script');
-</script>
-
+     
 
 
 
