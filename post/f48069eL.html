@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>一次敏感信息泄露引发的逻辑漏洞挖掘 | 十年磨一剑、潜心习安全 --小丑</title>
+  <meta name="description" content="根据手头上的信息，最大化的利用，一次简单的漏洞挖掘，感觉过程很有意思分享一下~ 0X01初始 收集子域，也是渗透的初始。这里我只是简单用了fofa发现了该公司用来管理合作的一些子域名然后发现是登录管理页面，深入然后发现很多的敏感信息。也是从其中的一处敏感泄露，引发了众多漏洞的挖掘。整个测试其实就花了半个小时不到。不过男人不能说自己快！，其实我花了很长时间呢。还是那句话千里之堤毁于蚁穴呀。 0X02">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一次敏感信息泄露引发的逻辑漏洞挖掘">
+<meta property="og:url" content="https://syste1n.github.io/post/f48069eL.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="根据手头上的信息，最大化的利用，一次简单的漏洞挖掘，感觉过程很有意思分享一下~ 0X01初始 收集子域，也是渗透的初始。这里我只是简单用了fofa发现了该公司用来管理合作的一些子域名然后发现是登录管理页面，深入然后发现很多的敏感信息。也是从其中的一处敏感泄露，引发了众多漏洞的挖掘。整个测试其实就花了半个小时不到。不过男人不能说自己快！，其实我花了很长时间呢。还是那句话千里之堤毁于蚁穴呀。 0X02">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUCEXXwuWLDSBk2AS5hXl98d2ic0jzjhEEXQKZNvS4LWfSp4vnf51UCuA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUuCria5lpG9Gk8jHQ1FR8SJA7PO6rYmLicUGjvIOZIGavIryZcMBIWlyg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUNJhKibnqOWpafKJBkt43uVEibRXkUcfRoic61P9CAAuRdKEtpf0rxOotA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUYm6kjAB8iacpPBpyVqrCBsTeVIDia0x2hJXia5JDSDDzslibQE8mBWerEg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUL2dntlKYT1nzy4OBWicpKCdv3FWVsibhlT9xfUlpqz3gDn9yXUmh8RoA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUb0BbhycwZ1v7Et0T1FSnewFQFX1smRRO7CgHvVfPMULt80jLqwbRfA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://syste1n.github.io/post/x">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUknnITbtNicfI9aDw1aLuvOreJd2nB0vnEibey2FibHVWapfZVIJCVP6Cw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUhrIiaUwnp9DP39cg5aC4J4hys6JthibesoFnTqkJ4icXJA21ViavLMKVLQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUU8RClNPCJFe1IfX8bXco1uUQ5q4kibgSmhhzOOsFWk0h2vFWo12HZbQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUtCRMW15njR0NAtmDkvwQ7bs7NDJIBCnwuJgEFed9fS6SwCottNy6JA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUpGibA3BhTbjJ1gjd0l5CFtEkOumcBowSpjPKvLZptia8Se9Opk2qG9qA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUV8d6ibSm0yhQ5sOcFfiageZvLdeMd9l6BFamL9dbfFibAqKP7TFUnXQrw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUrJqjX3Gd6sCiaPnHfcgLNOyYIxc0iaqz4Ov7YcL0R3IMNAdEYX4zm4Cw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUaGyNgQ80iac6ickAHaXSJH2KqK9808WwezpV1NPwD48ic1TXdVmKCqOHg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgU4HhwZhoziaIz3KS2a9oqoQOVUNBd8DYfXc52icWD2icM0oAibdjM0UwdIg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUfiauXwjBhnFhL6uuIpNKPdqt9HaQSOIjwF5Ha40icEoh0tOT4ibyEic5iaQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUzsdVLMuiaFMAbr630HYEvOdsvQw0ggicR8gHfhTtJpCQSuEQfZ04nBHQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUiby4T4JWUA6FNic9iaoHd4Yvzaia27Kr10Cm8y8IcyQWiaT1KiabQ2NR9lJg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUbqWKjpGCdBLdNIhnBjqkKNCYj9fadaXOEGRoDBzY3Gkfx0I0C5ib07Q/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUasYVrenCRNrV07mZbNk2wfFKJteLhVDUoNTkM2C2edTUhvialWibltDA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUIeHMCiaapfoQwaiceJ8FGTcnZKlJ31qYdnxxH2Lpz32PAIcz0rpsrIzA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgU8mMNwa1QZPHeiboBbIt7ia4AsB19KBHm5xJr1Am9iccFGJB71RSLeIKsQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:updated_time" content="2020-05-22T03:38:14.004Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一次敏感信息泄露引发的逻辑漏洞挖掘">
+<meta name="twitter:description" content="根据手头上的信息，最大化的利用，一次简单的漏洞挖掘，感觉过程很有意思分享一下~ 0X01初始 收集子域，也是渗透的初始。这里我只是简单用了fofa发现了该公司用来管理合作的一些子域名然后发现是登录管理页面，深入然后发现很多的敏感信息。也是从其中的一处敏感泄露，引发了众多漏洞的挖掘。整个测试其实就花了半个小时不到。不过男人不能说自己快！，其实我花了很长时间呢。还是那句话千里之堤毁于蚁穴呀。 0X02">
+<meta name="twitter:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUCEXXwuWLDSBk2AS5hXl98d2ic0jzjhEEXQKZNvS4LWfSp4vnf51UCuA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://syste1n.github.io/post/f48069eL.html">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/syste1n" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">小丑</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">十年磨一剑、潜心习安全</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> 杀不死你的东西，会让你变得更加怪异</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form" method="GET" action="https://www.baidu.com/s?">
+	<div class="input-group">
+    	<input name="wd" type="text" class="form-control search-form-input" placeholder="搜索" />
+	    <span class="input-group-btn">
+	    	<button type="submit" class=" btn btn-flat search-form-submit"><i class="icon icon-search"></i></button>
+	    </span>
+    </div>
+</form>
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/syste1n" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>本博客只用于学习、交流、共享.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/一句话木马/">一句话木马</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/渗透思路/">渗透思路</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/漏洞复现/">漏洞复现</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/7088/07/">七月 7088</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">七月 2019</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/post/b67aab62.html" class="title">关于友情链接</a>
+              </p>
+              <p class="item-date">
+                <time datetime="7088-07-02T08:07:38.000Z" itemprop="datePublished">7088-07-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/渗透思路/">渗透思路</a>
+              </p>
+              <p class="item-title">
+                <a href="/post/f48069eL.html" class="title">一次敏感信息泄露引发的逻辑漏洞挖掘</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-05-22T03:29:39.000Z" itemprop="datePublished">2020-05-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/渗透思路/">渗透思路</a>
+              </p>
+              <p class="item-title">
+                <a href="/post/f4c4e0c.html" class="title">渗透测试面试技巧</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-08-20T01:46:46.000Z" itemprop="datePublished">2019-08-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/渗透思路/">渗透思路</a>
+              </p>
+              <p class="item-title">
+                <a href="/post/b9ce30ce.html" class="title">后渗透之维护权限</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-08-09T03:00:48.000Z" itemprop="datePublished">2019-08-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/一句话木马/">一句话木马</a>
+              </p>
+              <p class="item-title">
+                <a href="/post/d793c560.html" class="title">一句话木马的各种变形</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-07-08T09:23:17.000Z" itemprop="datePublished">2019-07-08</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-一次敏感信息泄露引发的逻辑漏洞挖掘" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      一次敏感信息泄露引发的逻辑漏洞挖掘
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/post/f48069eL.html" class="article-date">
+	  <time datetime="2020-05-22T03:29:39.000Z" itemprop="datePublished">2020-05-22</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/渗透思路/">渗透思路</a>
+  </span>
+
+        
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/post/f48069eL.html#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>根据手头上的信息，最大化的利用，一次简单的漏洞挖掘，感觉过程很有意思分享一下~</p>
+<p><strong>0X01初始</strong></p>
+<p>收集子域，也是渗透的初始。这里我只是简单用了fofa发现了该公司用来管理合作的一些子域名然后发现是登录管理页面，深入然后发现很多的敏感信息。也是从其中的一处敏感泄露，引发了众多漏洞的挖掘。整个测试其实就花了半个小时不到。不过男人不能说自己快！，其实我花了很长时间呢。还是那句话千里之堤毁于蚁穴呀。</p>
+<p><strong>0X02挖掘开始</strong></p>
+<p>首先我发现了两处子域，直接上fofa简单粗暴有效</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUCEXXwuWLDSBk2AS5hXl98d2ic0jzjhEEXQKZNvS4LWfSp4vnf51UCuA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUuCria5lpG9Gk8jHQ1FR8SJA7PO6rYmLicUGjvIOZIGavIryZcMBIWlyg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>很明显的都是登录系统，而且都是供应商的登录系统。所以这里就引发一个问题，我们没有账号，也不知道账号的命名。所以很多测试都无从下手。它这里一个系统也提供了注册功能，但是需要提供企业的一系列证明，通过审核之后才能拥有账号。<br>那么要怎么办呢，这里我采用JSFinder工具，首先对两个登录系统，扫了一遍js。看看是否能有一些突破点。于是这一扫也就是整个渗透的开始。<br>这一扫，我发现了一些敏感信息泄露，泄露了一些管理员的创建时间，和名字，但是都无关轻重</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUNJhKibnqOWpafKJBkt43uVEibRXkUcfRoic61P9CAAuRdKEtpf0rxOotA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img">但是我发现了这个<br>xxx.com/超级供应商2.0功能操作手册-V1.0.0.doc<br>一个操作手册的链接，遂下载下来</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUYm6kjAB8iacpPBpyVqrCBsTeVIDia0x2hJXia5JDSDDzslibQE8mBWerEg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>这个文件就是系统的突破口，因为从中我们得到了，系统的账号命名规律，还有一些手机号，<br>这些信息都是我们之后深入测试的突破口<br>既然我们得到了账号的命名规律。然后我们发现此系统又是登录次数错误密码过多，才会出现验证码拦截。<br>于是当然万能弱口令走一波。用密码123456，和账号当做用户，密码去撞，<br>撞出来很多有效账号</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUL2dntlKYT1nzy4OBWicpKCdv3FWVsibhlT9xfUlpqz3gDn9yXUmh8RoA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>遂登录进去<br><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUb0BbhycwZ1v7Et0T1FSnewFQFX1smRRO7CgHvVfPMULt80jLqwbRfA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img">尽可能的收集信息<br>当时我的想法是如果无法有获取到大量数据的漏洞，就从别处下手<br>主要也是爆出来的账号功能权限大部分受阻，所以还是在后台只找到了一处越权打全站的存储xss。<br>“&gt;<img src="x" onerror="alert(1)">&lt;”<br>简单的闭合</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUknnITbtNicfI9aDw1aLuvOreJd2nB0vnEibey2FibHVWapfZVIJCVP6Cw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img">前面的shopbannerid 就是可以越权修改的地方</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUhrIiaUwnp9DP39cg5aC4J4hys6JthibesoFnTqkJ4icXJA21ViavLMKVLQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>只要用户点击广告设置的地方，即可触发xss<br>这个后台xss正好我们是可以验证的，因为爆出来很多账号，验证一下发现可行，所以即可越权打全部商户的cookie了<br>这也是从后台发现的一处可能危害较大的洞。<br>其实我认为我在后台发现最重要的地方是下面这个功能</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUU8RClNPCJFe1IfX8bXco1uUQ5q4kibgSmhhzOOsFWk0h2vFWo12HZbQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>然后我导出发现</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUtCRMW15njR0NAtmDkvwQ7bs7NDJIBCnwuJgEFed9fS6SwCottNy6JA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>里面存放着大量的商户数据，然后我从中又发现一部分账号的命名规律<br>这代表我们又可以加以利用啊。<br>不过这个只是一部分关键因素<br>因为我们前台的功能还有一处忘记密码啊。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUpGibA3BhTbjJ1gjd0l5CFtEkOumcBowSpjPKvLZptia8Se9Opk2qG9qA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>它这里，在我刚开始挖掘的时候就注意到，但是苦于无法知道账号和对应的公司名称，遂先放置<br>但是通过里面的信息泄露，我发现了命名规律和部分的账号名称<br>然后通过查看js提示 发现发送的验证码是4位。遂爆破</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUV8d6ibSm0yhQ5sOcFfiageZvLdeMd9l6BFamL9dbfFibAqKP7TFUnXQrw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>成功可以重置密码</p>
+<p><img src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" alt="img"></p>
+<p>而且我们这里是可以重置全站用户的，为什么这么说呢<br>因为我发现这一处好玩的功能点</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUrJqjX3Gd6sCiaPnHfcgLNOyYIxc0iaqz4Ov7YcL0R3IMNAdEYX4zm4Cw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>当你输入一些开头的文字，它下面会提取相似的供你选择，综合手头上的信息<br>我们已经掌握了全部的账号命名规律，然后公司名称那里也提供了<br>然后我发现这一处，可以固定公司名称，爆破账号，遂爆出对应的账号，即可修改全站的密码<br>包括管理员的。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUaGyNgQ80iac6ickAHaXSJH2KqK9808WwezpV1NPwD48ic1TXdVmKCqOHg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>而且上图可以发现，他这个操作手册其实是登录进去提供的功能下载的。</p>
+<p>而且当我们重置密码进去之后，里面有一处会员账号导出的功能，利用这一点我们可以不断的导出账号，发现它全部的账号命名规律<br>这样就可以最大话的，进行攻击。</p>
+<p>说完这个平台，该到另一个平台了</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgU4HhwZhoziaIz3KS2a9oqoQOVUNBd8DYfXc52icWD2icM0oAibdjM0UwdIg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>它这一处系统同样是商户系统，是用来给商户进行采购的</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUfiauXwjBhnFhL6uuIpNKPdqt9HaQSOIjwF5Ha40icEoh0tOT4ibyEic5iaQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>进行忘记密码功能</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUzsdVLMuiaFMAbr630HYEvOdsvQw0ggicR8gHfhTtJpCQSuEQfZ04nBHQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>这里我直接跳入到了第二步，第一处要输入商户手机号。<br>返回上文，在我们导出的大批的商户数据，不就是含括手机号嘛<br>于是乎，我直接拿来一个进行测试</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUiby4T4JWUA6FNic9iaoHd4Yvzaia27Kr10Cm8y8IcyQWiaT1KiabQ2NR9lJg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img">这里输入验证码抓包，将手机号换成自己的</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUbqWKjpGCdBLdNIhnBjqkKNCYj9fadaXOEGRoDBzY3Gkfx0I0C5ib07Q/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>输入手机验证码抓包</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUasYVrenCRNrV07mZbNk2wfFKJteLhVDUoNTkM2C2edTUhvialWibltDA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>将手机号换成我的<br>然后成功到密码重置界面<br>它这里应该只是看userid，在它发送验证码我手机收到验证码的时候，我们其实就会感觉到异常，因为它这里发送验证码是没有去和商户的手机号进行查询对比，是否存在发的<br>而且它最后一步，还带上了userid的值，所以我就可以通过替换手机号，还重置所有的商户密码</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUIeHMCiaapfoQwaiceJ8FGTcnZKlJ31qYdnxxH2Lpz32PAIcz0rpsrIzA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgU8mMNwa1QZPHeiboBbIt7ia4AsB19KBHm5xJr1Am9iccFGJB71RSLeIKsQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>再给各位观众老爷看一下，这是从上一个表格拿到的手机号。结合起来<br>到这里我就没有去测试了，因为我觉得我能修改你两个商户系统的所有用户密码，已经是很高的危害了。<br>而且需要修改密码才能进去继续测试，作为正义的白帽子应该点到为止~所以就到此结束啦</p>
+<p><strong>0X03总结</strong></p>
+<p>让我们来顺一下。一切罪恶的源头都要从，那一处由js泄露的敏感文件开始。从那里我们得知了账号命名规则。然后通过规则爆出出大量的弱口令，从而进去后台。又从后台发现大量的会员商户的账号和对应的手机号和对应的商户名称，这样我们才能继续测试忘记密码处的功能，然后我又通过这个手机号发现，我可以在另一个商户系统中使用。从而形成一个重置两个系统的商户密码的攻击链。<br>这一切还是由于一处未授权下载文件引起的啊。千里之堤毁于蚁穴<br>如何根据手头上的信息最大化攻击，emmm感觉才算是漏洞挖掘的有意思之处叭</p>
+<p>​                                                                                                           参考来源：先知社区</p>
+<p>​                                                                                                                   作者：任意门</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://syste1n.github.io/post/f48069eL.html" title="一次敏感信息泄露引发的逻辑漏洞挖掘" target="_blank" rel="external">https://syste1n.github.io/post/f48069eL.html</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客文章转载请注明出处,谢谢。
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/syste1n" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/syste1n" target="_blank"><span class="text-dark">小丑</span><small class="ml-1x">十年磨一剑、潜心习安全</small></a></h3>
+        <div>十年磨一剑、潜心习安全</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80NTAyMS8yMTUzOQ==">
+        <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+      </div>    
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/post/b67aab62.html" title="关于友情链接"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/post/f4c4e0c.html" title="渗透测试面试技巧"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+
+</main>
+
+  <<footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/syste1n" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+        
+        <div class="powered-by">
+        </div>
+        <!-- <div class="publishby">
+            Hexo <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span >本站总访问量: <span id="busuanzi_value_site_uv"></span>次</span>
+    <div class="beian-info">
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function ($) {
+    $('.search-form').on('submit', function (e) {
+        var keyword = $('.search-form-input[name="wd"]').val();
+        window.location = 'https://www.baidu.com/s?wd=site:syste1n.github.io ' + keyword;
+        return false;
+    });
+})(jQuery);
+</script>
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+</body>
+</html>
