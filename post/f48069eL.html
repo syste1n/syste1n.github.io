@@ -49,7 +49,7 @@
 <meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUasYVrenCRNrV07mZbNk2wfFKJteLhVDUoNTkM2C2edTUhvialWibltDA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
 <meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUIeHMCiaapfoQwaiceJ8FGTcnZKlJ31qYdnxxH2Lpz32PAIcz0rpsrIzA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
 <meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgU8mMNwa1QZPHeiboBbIt7ia4AsB19KBHm5xJr1Am9iccFGJB71RSLeIKsQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
-<meta property="og:updated_time" content="2020-05-22T03:38:14.004Z">
+<meta property="og:updated_time" content="2020-05-22T03:44:11.963Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一次敏感信息泄露引发的逻辑漏洞挖掘">
 <meta name="twitter:description" content="根据手头上的信息，最大化的利用，一次简单的漏洞挖掘，感觉过程很有意思分享一下~ 0X01初始 收集子域，也是渗透的初始。这里我只是简单用了fofa发现了该公司用来管理合作的一些子域名然后发现是登录管理页面，深入然后发现很多的敏感信息。也是从其中的一处敏感泄露，引发了众多漏洞的挖掘。整个测试其实就花了半个小时不到。不过男人不能说自己快！，其实我花了很长时间呢。还是那句话千里之堤毁于蚁穴呀。 0X02">
@@ -367,7 +367,7 @@
 <p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUYm6kjAB8iacpPBpyVqrCBsTeVIDia0x2hJXia5JDSDDzslibQE8mBWerEg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
 <p>这个文件就是系统的突破口，因为从中我们得到了，系统的账号命名规律，还有一些手机号，<br>这些信息都是我们之后深入测试的突破口<br>既然我们得到了账号的命名规律。然后我们发现此系统又是登录次数错误密码过多，才会出现验证码拦截。<br>于是当然万能弱口令走一波。用密码123456，和账号当做用户，密码去撞，<br>撞出来很多有效账号</p>
 <p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUL2dntlKYT1nzy4OBWicpKCdv3FWVsibhlT9xfUlpqz3gDn9yXUmh8RoA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
-<p>遂登录进去<br><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUb0BbhycwZ1v7Et0T1FSnewFQFX1smRRO7CgHvVfPMULt80jLqwbRfA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img">尽可能的收集信息<br>当时我的想法是如果无法有获取到大量数据的漏洞，就从别处下手<br>主要也是爆出来的账号功能权限大部分受阻，所以还是在后台只找到了一处越权打全站的存储xss。<br>“&gt;<img src="x" onerror="alert(1)">&lt;”<br>简单的闭合</p>
+<p>遂登录进去<br><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUb0BbhycwZ1v7Et0T1FSnewFQFX1smRRO7CgHvVfPMULt80jLqwbRfA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img">尽可能的收集信息<br>当时我的想法是如果无法有获取到大量数据的漏洞，就从别处下手<br>主要也是爆出来的账号功能权限大部分受阻，所以还是在后台只找到了一处越权打全站的存储xss。<br>“&gt;<img src="x" onerror="alert(老铁没JJ)">&lt;”<br>简单的闭合</p>
 <p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUknnITbtNicfI9aDw1aLuvOreJd2nB0vnEibey2FibHVWapfZVIJCVP6Cw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img">前面的shopbannerid 就是可以越权修改的地方</p>
 <p><img src="https://mmbiz.qpic.cn/mmbiz_png/Uq8Qfeuvou8HSiaqho4hrnHSAEotHQbgUhrIiaUwnp9DP39cg5aC4J4hys6JthibesoFnTqkJ4icXJA21ViavLMKVLQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
 <p>只要用户点击广告设置的地方，即可触发xss<br>这个后台xss正好我们是可以验证的，因为爆出来很多账号，验证一下发现可行，所以即可越权打全部商户的cookie了<br>这也是从后台发现的一处可能危害较大的洞。<br>其实我认为我在后台发现最重要的地方是下面这个功能</p>
